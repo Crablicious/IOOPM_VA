@@ -1,7 +1,7 @@
-#include "db_listmodule.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "db_listmodule.h"
 
 //implementationen
 
@@ -19,7 +19,7 @@ typedef struct node{
 
 Node list = NULL;
 Node cursor = NULL;
-Node *current_list = NULL;
+Node current_list = NULL; //Varför går det inte att ha den här som pekare?
 
 /* Node empty_node(){ //används ej just nu. */
 /*   Node empty = NULL; //måste allokera minne */
@@ -27,38 +27,37 @@ Node *current_list = NULL;
 /* } */
 
 
-//allokera minne!
-void add_node(char input_key, char input_value){
+
+void add_node(char input_key[], char input_value[]){
  
   Node new_node = malloc(sizeof(struct node));
-  new_node->key = malloc(strlen(buffer) + 1);
-  new_node->value = malloc(strlen(buffer) + 1);
-  new_node->key = &input_key;
-  new_node->value = &input_value;
-  new_node->next = *current_list;
-  *current_list = new_node;
+  new_node->key = malloc(strlen(input_key) + 1);
+  strcpy(new_node->key, input_key);
+  new_node->value = malloc(strlen(input_value) + 1);
+  strcpy(new_node->value, input_value);
+  new_node->next = current_list; //errorrad
+  current_list = new_node;
 }
 
 
 //case 1
-int search_entry(char *buffer){
+int search_entry(char input_buffer[]){
   int found = 0;
-  cursor = *current_list;
+  cursor = current_list;
   while(!found && cursor != NULL){
-    if(strcmp(buffer, cursor->key) == 0){
+    if(strcmp(input_buffer, cursor->key) == 0){
       found = 1;
       char *node_key = cursor->key;
       char *node_value = cursor->value;
+      printf("key: %s\nvalue: %s\n", node_key, node_value);
       return 1;
     }else{
       cursor = cursor->next;
     }
   }
-  if(!found){
-    return 0;
-  }
-  
+  return 0;
 }
+
 
  
 /* //case 2 */
@@ -153,15 +152,15 @@ int search_entry(char *buffer){
 /* } */
 
 
-/* //case 5 */
-/* void print_database(){ */
-/*   cursor = list; */
-/*   while(cursor != NULL){ */
-/*     puts(cursor->key); */
-/*     puts(cursor->value); */
-/*     cursor = cursor->next; */
-/*   } */
-/* } */
+// case 5
+void print_database(){
+  cursor = current_list;
+  while(cursor != NULL){
+    puts(cursor->key);
+    puts(cursor->value);
+    cursor = cursor->next;
+  }
+}
 
 
 

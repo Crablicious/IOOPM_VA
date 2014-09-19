@@ -35,9 +35,10 @@ void pull_database(char *filename){
   //Bygger upp en nodstruktur mha filen vi matar in.
   
   while(!(feof(database))){
+
     read_line(buffer, 128, database);
     read_line(buffer2, 128, database);
-    add_node(*buffer, *buffer2);
+    add_node(buffer, buffer2);
   }
   fclose(database);
 }
@@ -46,12 +47,13 @@ void query_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-  if (search_entry(*buffer)){
+  if (search_entry(buffer)){
     puts("Found entry:");
     //printf("key: %s\nvalue: %s\n");
   }
-  printf("Could not find an entry matching key \"%s\"!\n", buffer);
-
+  else{
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
+  }
 }
 
 
@@ -81,9 +83,9 @@ void main_loop(){
     /* case 4: //deletes an entry */
     /*   delete_entry(); */
     /*   break; */
-    /* case 5: //prints the whole database */
-    /*   print_database(); */
-    /*   break; */
+    case 5: //prints the whole database
+      print_database();
+      break;
     case 0: // Exit
       puts("Good bye!");
       break;
