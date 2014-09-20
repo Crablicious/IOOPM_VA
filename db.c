@@ -47,12 +47,8 @@ void query_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-  if (search_entry(buffer)){
-    puts("Found entry:");
-    //printf("key: %s\nvalue: %s\n");
-  }
-  else{
-    printf("Could not find an entry matching key \"%s\"!\n", buffer);
+  if (!search_entry(buffer)){
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);    
   }
 }
 
@@ -105,8 +101,8 @@ int main(int argc, char *argv[]){
   //Prints a welcome message
   print_welcome();
   // Read the input file
-  pull_database(argv[1]);
-  
+  //pull_database(argv[1]);
+  pull_database (*(argv+1));
   // Main loop
   main_loop();
   return 0;

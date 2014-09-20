@@ -19,7 +19,8 @@ typedef struct node{
 
 Node list = NULL;
 Node cursor = NULL;
-Node current_list = NULL; //Varför går det inte att ha den här som pekare?
+Node current_list = NULL; //Varför går det inte att ha den här som pekare eller på heapen?
+
 
 /* Node empty_node(){ //används ej just nu. */
 /*   Node empty = NULL; //måste allokera minne */
@@ -36,7 +37,7 @@ void add_node(char input_key[], char input_value[]){
   new_node->value = malloc(strlen(input_value) + 1);
   strcpy(new_node->value, input_value);
   new_node->next = current_list; //errorrad
-  current_list = new_node;
+  current_list = new_node; //spars vår data på stacken eller heapen? -HEAPEN!
 }
 
 
@@ -49,7 +50,7 @@ int search_entry(char input_buffer[]){
       found = 1;
       char *node_key = cursor->key;
       char *node_value = cursor->value;
-      printf("key: %s\nvalue: %s\n", node_key, node_value);
+      printf( "Found entry:\nkey: %s\nvalue: %s\n", node_key, node_value); //Få ut till db.c istället. Hur?
       return 1;
     }else{
       cursor = cursor->next;

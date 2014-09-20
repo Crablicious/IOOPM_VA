@@ -1,0 +1,71 @@
+Victorias och Adams kommande redovisningar:
+
+
+Första redovisning:
+*A1
+  -Control - typ modulering 
+  -Data - datatyper, ex noder
+  -Läcka - att implementationen märks genom abstraktionen. Bilanvändning
+
+*A3
+  -stdlib
+  -går hand i hand med abstraktion och moduler
+  -inte det ena eller andra
+  -göra konkurrenskraftig, andra kan inte se min kod     
+
+*K30 & K31 & K32
+  -Modularisering: delar upp programmet
+  -Parallellprogrammering - jobbar med samma programm men olika delar, behöver inte vara medveten om vad den andra håller på med
+  -Cohesion - inom modulen, hur enhetlig är modulen? Behandla endast grafik vs behandla ljud OCH grafik.
+  -Coupling - mellan moduler, hur beroende är de av varandra? kan man byta ut en modul? borde man lägga i samma modul istället?
+  -Separations of concerns: Genom updatera en viss del (modul) kunna optimera programmet. I vårt fall göra ett binärt sökträd. De andra delarna ska vara oberoende. Låg cohesion och hög coupling.
+
+
+Andra Redovisningen:
+*M36
+   -En konsekutiv längd av element av samma typ i minnet. 
+   -Kan peka på element i en array manuellt genom att behandla den som en pekare, array[1] = *(array+1)
+   -Beror på längd?
+   -Visa på main i vårt program
+
+*M37
+   - Vår länkade lista
+   - key*value*next
+   - Kan göra till ett binärt sökträd som också är en länkad struktur
+
+*M38
+   -Istället för att skicka över listan, använder vi pekare så att olika funktioner använder samma data.
+   -Förenklar sido-effekter.
+
+*M39
+   - Node är ju en pekare. 
+
+
+**R50
+  -Visa med koden helt enkelt
+      
+**T54
+  -Tabba (dock funkar det typ inte)
+  -C-space
+
+**U55
+  -Make -kolla upp!
+
+
+
+**D9
+  -Gör klart modulen först
+
+**F13
+  - Gör search entry till rekursiv och jämför.
+
+**F14
+  - Deklarativ: funktionell, utan sido-effekter, f(7)=14 oavsett, sägar VAD saker ska göra ex map, skapar en ny lista, statisk
+  - Imperativ: detaljstyrt, måste följa en ordning, f(7) inte alltid =14, säger HUR saker ska göras. t.ex iterera en lista med for-loop, dynamisk
+
+**J26 & J27
+  - Heap: statisk,minne allokeras manuellt och måste frigöras, större minne, 
+  - Stack: Dynamisk, lokala variabler, försvinner när funktionen är klar, mindre minne, stackoverflow vid stora (tail)-rekursions      
+  - Valgrind: 
+
+
