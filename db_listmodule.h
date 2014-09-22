@@ -1,6 +1,9 @@
 #include <stdio.h>
 
-// empty_node();
+//Struct of implementation
+struct node;
+
+// empty();
 
 //Adds an entry (key, value) into the database. 
 void add_node(char input_key[], char input_value[]);
@@ -9,7 +12,7 @@ void add_node(char input_key[], char input_value[]);
 int search_entry(char input_buffer[]);
 
 //Changes the value of a specified key in an entry
-/* void update_entry(); */
+void update_entry_mod(char buffer); 
 
 //
 /* void insert_entry(); */
