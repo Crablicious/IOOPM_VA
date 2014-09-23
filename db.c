@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "db_listmodule.h"
-//flychecker
 
+//flychecker
+// what? ^?
 char buffer[128]; // Globala eller inte?
 char buffer2[128];
 
@@ -27,15 +28,11 @@ void read_line(char *dest, int n, FILE *source){
 }
 
 void pull_database(char *filename){
-
   printf("Loading database \"%s\"...\n\n", filename);
   FILE *database = fopen(filename, "r");
-  
   // Copys the whole file
   //Bygger upp en nodstruktur mha filen vi matar in.
-  
-  while(!(feof(database))){
-
+    while(!(feof(database))){
     read_line(buffer, 128, database);
     read_line(buffer2, 128, database);
     add_node(buffer, buffer2);
@@ -47,10 +44,13 @@ void query_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-    
-  if (!search_entry(buffer)){
-    printf("Could not find an entry matching key \"%s\"!\n", buffer);    
-  }
+  int found = search_entry(buffer, buffer2);   
+  if (found){
+  printf("Found entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);   
+}
+ else{
+   printf("Could not find an entry matching key \"%s\"!\n", buffer); 
+ }
 }
 
 /* void update_entry(){ */

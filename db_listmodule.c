@@ -35,40 +35,34 @@ Node empty_node(){
 /*   return new_node; */
 /* } */
 
-
-void clone_string(char point, char *input_key){
-  *point = malloc(strlen(input_key)+1);
-  strcpy(*point, input_key);
+char *clone_string(char *input_key){
+  char *point = malloc(strlen(input_key)+1);
+  strcpy(point, input_key);
+  return point;
 } 
 
 void add_node(char *input_key, char *input_value){
   Node new_node = empty_node();
-  
-  clone_string((new_node->key), input_key);
-
-  clone_string((new_node->value), input_value);
-
+  new_node->key = clone_string(input_key);
+  new_node->value = clone_string(input_value);
   new_node->next = current_list; //errorrad
   current_list = new_node; //spars vår data på stacken eller heapen? -HEAPEN!
 }
 
 
 //case 1
-int search_entry(char input_buffer[]){
+int search_entry(char input_buffer[],char *output_buffer){
   int found = 0;
   cursor = current_list;
   while(!found && cursor != NULL){
     if(strcmp(input_buffer, cursor->key) == 0){
       found = 1;
-      char *node_key = cursor->key;
-      char *node_value = cursor->value;
-      printf("Found entry:\nkey: %s\nvalue: %s\n", node_key, node_value); //Få ut till db.c istället. Hur?
-      return 1;
+      strcpy(output_buffer, cursor->value);
     }else{
       cursor = cursor->next;
     }
   }
-  return 0;
+  return found;
 }
 
 
