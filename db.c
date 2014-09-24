@@ -30,9 +30,7 @@ void read_line(char *dest, int n, FILE *source){
 void pull_database(char *filename){
   printf("Loading database \"%s\"...\n\n", filename);
   FILE *database = fopen(filename, "r");
-  // Copys the whole file
-  //Bygger upp en nodstruktur mha filen vi matar in.
-    while(!(feof(database))){
+  while(!(feof(database))){
     read_line(buffer, 128, database);
     read_line(buffer2, 128, database);
     add_node(buffer, buffer2);
@@ -44,9 +42,9 @@ void query_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-  int found = search_entry(buffer, buffer2);   
+  char *found = search_entry(buffer);   
   if (found){ 
-  printf("Found entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);   
+  printf("Found entry:\nkey: %s\nvalue: %s\n", buffer, found);   
 }
  else{
    printf("Could not find an entry matching key \"%s\"!\n", buffer); 
@@ -57,22 +55,52 @@ void update_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-  int found = search_entry(buffer, buffer2);
-  if (found){
-    puts("Matching entry found:");
-    printf("key: %s\nvalue: %s\n\n", buffer, buffer2);
+  char *found = search_entry(buffer);
+  if(found){
+    printf("Matching entry found:\nkey: %s\nvalue: %s\n\n", buffer, found);
     puts("Enter new value:");
     read_line(buffer, 128, stdin);
-    update_value(buffer2, buffer); // (old_value, new_value)
-    printf("Value updated: %s\n", buffer2);
+    update_value(found, buffer); // (old_value, new_value)
+    printf("Value updated: %s\n", found);
   }
-  
   else{
     printf("Could not find an entry matching key \"%s\"!\n", buffer);
   }
 }
 
 
+void insert_entry(){
+  char *found = NULL;
+  int first = 1;
+  while(found || first){ //separera till en hjälpfunktion
+    first = 0;
+    puts("Enter key");
+    read_line(buffer, 128, stdin);
+    puts("Searching database for duplicate keys...");
+    found = search_entry(buffer);  
+    if(found){
+      puts("key already exists, choose another one!\n");
+    } 
+} 
+  puts("Key is unique!\nEnter value: ");
+  read_line(buffer2, 128, stdin);
+  add_node(buffer, buffer2);
+}
+
+void delete_entry(){
+  char *found = NULL;
+  while(!found){ //separera till en hjälpfunktion
+    puts("Enter key");
+    read_line(buffer, 128, stdin);
+    puts("Searching database for the key...");
+    found = search_entry(buffer);  
+    if(!found){
+      puts("Key does not exist, choose another one!\n");
+    } 
+  }
+  remove_node(buffer, buffer2);
+  printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);
+}
 
 void main_loop(){
   int choice = -1;
@@ -93,13 +121,13 @@ void main_loop(){
       break;  
     case 2: //update an existing entry
       update_entry();
-    /*   break; */
-    /* case 3: //insert a new entry */
-    /*   insert_entry(); */
-    /*   break; */
-    /* case 4: //deletes an entry */
-    /*   delete_entry(); */
-    /*   break; */
+      break;
+    case 3: //insert a new entry
+      insert_entry();
+    break;
+     case 4: //deletes an entry 
+       delete_entry();
+       break; 
     case 5: //prints the whole database
       print_database();
       break;
@@ -119,7 +147,6 @@ int main(int argc, char *argv[]){
     puts("Usage: db [FILE]");
     return -1;
   }
-  //Prints a welcome message
   print_welcome();
   // Read the input file
   //pull_database(argv[1]);
