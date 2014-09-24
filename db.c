@@ -45,7 +45,7 @@ void query_entry(){
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
   int found = search_entry(buffer, buffer2);   
-  if (found){
+  if (found){ 
   printf("Found entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);   
 }
  else{
@@ -53,22 +53,24 @@ void query_entry(){
  }
 }
 
-/* void update_entry(){ */
-/*   printf("Enter key: "); */
-/*   read_line(buffer, 128, stdin); */
-/*   puts("Searching database...\n"); */
-/*   if (search_entry(buffer)){ */
-
-/*     if(update_entry_mod(buffer)){ */
-/*     puts("Matching entry found:"); */
-    
-/*     //Få värdena från modulen. */
-/*     } */
-/*   } */
-/*   else{ */
-/*     printf("Could not find an entry matching key \"%s\"!\n", buffer);     */
-/*   } */
-/* } */
+void update_entry(){
+  printf("Enter key: ");
+  read_line(buffer, 128, stdin);
+  puts("Searching database...\n");
+  int found = search_entry(buffer, buffer2);
+  if (found){
+    puts("Matching entry found:");
+    printf("key: %s\nvalue: %s\n\n", buffer, buffer2);
+    puts("Enter new value:");
+    read_line(buffer, 128, stdin);
+    update_value(buffer2, buffer); // (old_value, new_value)
+    printf("Value updated: %s\n", buffer2);
+  }
+  
+  else{
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
+  }
+}
 
 
 
@@ -89,8 +91,8 @@ void main_loop(){
     case 1: //query an entry
       query_entry();
       break;  
-      //case 2: //update an existing entry
-      // update_entry();
+    case 2: //update an existing entry
+      update_entry();
     /*   break; */
     /* case 3: //insert a new entry */
     /*   insert_entry(); */

@@ -12,7 +12,7 @@ void add_node(char input_key[], char input_value[]);
 int search_entry(char input_buffer[], char *output_buffer);
 
 //Changes the value of a specified key in an entry
-void update_entry_mod(char buffer); 
+void *update_value(char *old_value, char *new_value); 
 
 //
 /* void insert_entry(); */
