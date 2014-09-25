@@ -62,7 +62,6 @@ char *search_entry(char input_buffer[]){
 //case 2 
 void update_value(char *old_value, char *new_value){
   strcpy(old_value, new_value);
-  printf("Updated %s \n with %s", old_value, new_value);
 }
   
 

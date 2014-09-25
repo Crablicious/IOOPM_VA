@@ -1,11 +1,31 @@
 Victorias och Adams kommande redovisningar:
 
+Dagens redovisnin:
 
-Första redovisning:
-*A1
+A1
   -Control - typ modulering 
   -Data - datatyper, ex noder
   -Läcka - att implementationen märks genom abstraktionen. Bilanvändning
+
+U55
+  -Visa makefil!
+
+M36
+  -En konsekutiv längd av element av samma typ i minnet. 
+  -Kan peka på element i en array manuellt genom att behandla den som en pekare, array[5] = *(array+5)
+  -Visa på main i vårt program
+
+M37
+  - Vår länkade lista
+  - key*value*next
+  - Kan göra till ett binärt sökträd som också är en länkad struktur
+
+
+
+
+
+
+--------
 
 *A3
   -stdlib
@@ -13,7 +33,7 @@ Första redovisning:
   -inte det ena eller andra
   -göra konkurrenskraftig, andra kan inte se min kod     
 
-*K30 & K31 & K32
+K32
   -Modularisering: delar upp programmet
   -Parallellprogrammering - jobbar med samma programm men olika delar, behöver inte vara medveten om vad den andra håller på med
   -Cohesion - inom modulen, hur enhetlig är modulen? Behandla endast grafik vs behandla ljud OCH grafik.
@@ -22,16 +42,8 @@ Första redovisning:
 
 
 Andra Redovisningen:
-*M36
-   -En konsekutiv längd av element av samma typ i minnet. 
-   -Kan peka på element i en array manuellt genom att behandla den som en pekare, array[1] = *(array+1)
-   -Beror på längd?
-   -Visa på main i vårt program
 
-*M37
-   - Vår länkade lista
-   - key*value*next
-   - Kan göra till ett binärt sökträd som också är en länkad struktur
+
 
 *M38
    -Istället för att skicka över listan, använder vi pekare så att olika funktioner använder samma data.
@@ -41,15 +53,13 @@ Andra Redovisningen:
    - Node är ju en pekare. 
 
 
-**R50
+*R50
   -Visa med koden helt enkelt
       
-**T54
+*T54
   -Tabba (dock funkar det typ inte)
   -C-space
 
-**U55
-  -Make -kolla upp!
 
 
 

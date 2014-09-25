@@ -61,7 +61,7 @@ void update_entry(){
     puts("Enter new value:");
     read_line(buffer, 128, stdin);
     update_value(found, buffer); // (old_value, new_value)
-    printf("Value updated: %s\n", found);
+    printf("Value updated to %s\n", found);
   }
   else{
     printf("Could not find an entry matching key \"%s\"!\n", buffer);
@@ -149,8 +149,8 @@ int main(int argc, char *argv[]){
   }
   print_welcome();
   // Read the input file
-  //pull_database(argv[1]);
-  pull_database (*(argv+1));
+  //pull_database(argv[1]); //arraynotation
+  pull_database (*(argv+1)); //pekarnotation
   // Main loop
   main_loop();
   return 0;
