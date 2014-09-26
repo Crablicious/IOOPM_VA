@@ -11,5 +11,9 @@ db: db.c db_listmodule.o db_listmodule.h
 db_listmodule.o: db_listmodule.c
 	$(COMPILE) -c db_listmodule.c  
 
+db_treemodule.o: db_treemodule.c
+	$(COMPILE) -c db_treemodule.c
+
 clean:
 	rm -rf *o
+
