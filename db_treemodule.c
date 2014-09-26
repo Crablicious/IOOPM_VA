@@ -57,7 +57,6 @@ int depth(Node current_tree){
   else{
     count_left = 1 + depth(current_tree->left);
   }
-
   if (count_left>count_right){
     return count_left;
   }
@@ -66,26 +65,78 @@ int depth(Node current_tree){
   }
 }
 
-void balance(Node tree){
-  if (tree->left == NULL){
-  //case 1
-    if (tree->right->left == NULL){
-      
-      }
-    //case 2
-    else{
 
+int check_parent(Node tree, Node parent){
+  if (0<(strcmp(tree->key, parent->key))){
+    return 1;
+  } 
+  else{
+    return 0;
+  }
+}
+
+void balance(Node tree, Node parent){
+  int r_or_left = check_parent(tree, parent);
+ 
+  if (tree->left == NULL){
+    //case 1
+    if (tree->right->left == NULL){
+      tree->right->left=tree;
+
+      if (r_or_left){
+        parent->right=tree->right;
+      }
+      else{
+        parent->left=tree->right;
+      }
+
+      tree->right=NULL;
+      tree->left=NULL;
     }
-  
+    //case 2tr
+    else{
+      tree->right->right=tree->right->left;
+      tree->right->left=tree;
+      
+      if (r_or_left){
+        parent->right=tree->right;
+      }
+      else{
+        parent->left=tree->right;
+      }
+      
+      tree->right=NULL;
+      tree->left=NULL;
+    }
   }
   else{
   //case 3
     if (tree->left->right == NULL){
+      tree->left->right=tree;
+
+      if (r_or_left){
+        parent->right=tree->left;
+      }
+      else{
+        parent->left=tree->left;
+      }
       
+      tree->right=NULL;
+      tree->left=NULL;
       }
     //case 4
     else{
-      
+      tree->left->left=tree->left->right;
+      tree->left->right=tree;
+
+      if (r_or_left){
+        parent->right=tree->left;
+      }
+      else{
+        parent->left=tree->left;
+      }
+      tree->right=NULL;
+      tree->left=NULL;
     }
   }
 }
@@ -101,7 +152,7 @@ void insert_node(Node new_node, Node tree, Node parent){
     insert_node(new_node, tree->right, tree);
   }
   if (1 < abs(depth(tree->right) - depth(tree->left))){
-    balance(tree);
+    balance(tree, parent);
   }
 }
 
