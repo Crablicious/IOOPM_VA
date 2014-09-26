@@ -37,25 +37,25 @@ Node create_node(char *input_key, char *input_value){
   Node new_node = empty_node();
   new_node->key = clone_string(input_key);
   new_node->value = clone_string(input_value);
-  new_node->right = NULL;
-  new_node->left = NULL;
+  new_node->right = empty_node();
+  new_node->left = empty_node();
   return new_node;
 }
 //Funkar kanske
-int depth(Node current_tree){
+int depth(Node tree){
   int count_right = 0;
   int count_left = 0;
-  if (current_tree->right == NULL){
+  if (tree->right == NULL){
     return 1;
   }
   else{
-    count_right = 1 + depth(current_tree->right);
+    count_right = 1 + depth(tree->right);
   }
-  if (current_tree->left == NULL){
+  if (tree->left == NULL){
     return 1;
   }
   else{
-    count_left = 1 + depth(current_tree->left);
+    count_left = 1 + depth(tree->left);
   }
   if (count_left>count_right){
     return count_left;
@@ -145,12 +145,15 @@ void insert_node(Node new_node, Node tree, Node parent){
   if(tree == NULL){
     tree = new_node;
   }
-  if(0 < strcmp(new_node->key, tree->key)){
-    insert_node(new_node, tree->left, tree);
-  }
   else{
-    insert_node(new_node, tree->right, tree);
+    if(0 < strcmp(new_node->key, tree->key)){
+      insert_node(new_node, tree->left, tree);
+    }
+    else{
+      insert_node(new_node, tree->right, tree);
+    }
   }
+  printf("Hej: %s, %s,\n", tree->key, tree->value);
   if (1 < abs(depth(tree->right) - depth(tree->left))){
     balance(tree, parent);
   }
@@ -158,20 +161,18 @@ void insert_node(Node new_node, Node tree, Node parent){
 
 //Adds an entry (key, value) into the database. 
 void add_node(char *input_key, char *input_value){
-  //Lägg noden på rätt plats - check
-  //Kolla djupet på "uppåtvägen" om det behöver balanseras
-  Node new_node = create_node(input_key, input_value); 
+  Node new_node = create_node(input_key, input_value);
+  printf("Hej: %s, %s,\n", new_node->key, new_node->value);
   insert_node(new_node, current_tree, NULL);
   
-  if (depth(current_tree));
 }
 
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-char *search_entry(char input_buffer[]){
+char *search_entry(char *input_buffer){
   cursor = current_tree;
   while (strcmp(input_buffer, cursor->key) != 0){
-    if (input_buffer > cursor->key){
-      if (cursor->right){
+    if (0 < strcmp(input_buffer, cursor->key)){
+      if (cursor->right != NULL){
         cursor = cursor->right;
       }
       else{
@@ -179,8 +180,7 @@ char *search_entry(char input_buffer[]){
       }
     }
     else{
-      if (cursor->left)
-        {
+      if (cursor->left != NULL){
           cursor = cursor->left;
         }
       else{
