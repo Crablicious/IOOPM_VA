@@ -90,15 +90,15 @@ void balance(Node tree){
   }
 }
 
-void insert_node(Node new_node, Node tree){
+void insert_node(Node new_node, Node tree, Node parent){
   if(tree == NULL){
     tree = new_node;
   }
   if(0 < strcmp(new_node->key, tree->key)){
-    insert_node(new_node, tree->left);
+    insert_node(new_node, tree->left, tree);
   }
   else{
-    insert_node(new_node, tree->right);
+    insert_node(new_node, tree->right, tree);
   }
   if (1 < abs(depth(tree->right) - depth(tree->left))){
     balance(tree);
@@ -110,7 +110,7 @@ void add_node(char *input_key, char *input_value){
   //Lägg noden på rätt plats - check
   //Kolla djupet på "uppåtvägen" om det behöver balanseras
   Node new_node = create_node(input_key, input_value); 
-  insert_node(new_node, current_tree);
+  insert_node(new_node, current_tree, NULL);
   
   if (depth(current_tree));
 }
