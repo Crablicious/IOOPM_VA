@@ -1,0 +1,50 @@
+Redovisning A3 & X59
+-----------------------
+Inledning: check
+
+Idag pratar vi
+Om informationsgömning
+Det är en princip
+
+Relaterat till
+Abstraktion och moduler
+Förenklas med bil
+
+      Det här ska vi prata om.
+      Abstraktion
+      Informationsgömning
+
+
+Kropp:
+
+Slide med olika bilmodeller:
+        Bilexempel:
+        - Köra en bil -> köra i princip alla bilar
+        
+        Vi ska försöka förklara informationsgömning mha bilar. Det finns många olika märken och modeller. Har du lärt dig att köra en bil kan du utan problem sätta dig i en helt annan bil av annan modell/märke och ha förmågan att använda den. Du har inget behov av att veta "implementationen" av bilen för att kunna köra den. Handbromsen kan vara mekanisk eller elektronisk, men förarens "gränssnitt" förblir densamma, det är en spak som du drar i. Det innebär att din mekaniker kan byta ut din motor och du behöver inte lära om dig att köra bilen.                          
+
+        Informationsgömning i C, moduler:
+
+Informationsgömning går i princip till på samma sätt i C. Användaren har ett gränssnitt den använder implementationen igenom. Utan att ha en aning om hur den egentliga koden faktiskt ser ut. Gränsnittet i C är .h filen/rna och implementationen hittas i .c filen/rna. Målet är att gränssnittet ska vara så stabilt att förändringar i modulen inte ska medföra ändringar i gränssnittet.  
+
+En bra inkapslad modul är en god teknik för att göra informationsgömning.
+
+Varför?
+Informationsgömning är fördelaktigt när man jobbar i grupp och stora projekt. Då kan lättare få en översikt över och använda andras moduler utan att behöva sätta dig in i deras kod. De kan i sin tur uppdatera sin modul med en annan implementation utan att du som användare drabbas.
+
+        Gränssnitt
+                - .h filer
+        Implementationen
+                - .c filer
+        Informationsgömning är en princip och inte en teknik.
+
+Avslut:
+Sammanfattningshaiku - "inkludera bil"
+        
+Diskuterat bil
+Principen infogömning
+Kopplat till koden
+
+Inkapsling modul
+Teknik för att slippa strul
+Slippa se ful kod
