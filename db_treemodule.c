@@ -168,28 +168,17 @@ void add_node(char *input_key, char *input_value){
 }
 
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-char *search_entry(char *input_buffer){
-  cursor = current_tree;
-  while (strcmp(input_buffer, cursor->key) != 0){
-    if (0 < strcmp(input_buffer, cursor->key)){
-      if (cursor->right != NULL){
-        cursor = cursor->right;
-      }
-      else{
-        return NULL;
-      }
+Node *search_entry(char *input_key, Node *tree){
+  int compare = strcmp(input_key, tree->key);
+    while (tree != NULL){
+    int compare = strcmp(input_key, *tree->key);
+    if (compare == 0){
+      return tree;
+    }else{
+      tree = compare > 0 ? right: left;
     }
-    else{
-      if (cursor->left != NULL){
-          cursor = cursor->left;
-        }
-      else{
-        return NULL;
-      }
     }
-  } 
-  return cursor->value;
-}
+  return &tree;
 
 //Changes the value of a specified key in an entry
 void update_value(char *old_value, char *new_value){
