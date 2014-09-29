@@ -164,18 +164,17 @@ void add_node(char *input_key, char *input_value){
   Node new_node = create_node(input_key, input_value);
   printf("Hej: %s, %s,\n", new_node->key, new_node->value);
   insert_node(new_node, current_tree, NULL);
-  
 }
 
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
 Node *search_entry(char *input_key, Node *tree){
-  int compare = strcmp(input_key, tree->key);
+  int compare = compare(input_key, tree->key);
     while (tree != NULL){
-    int compare = strcmp(input_key, *tree->key);
+    int compare = compare(input_key, *tree->key);
     if (compare == 0){
       return tree;
     }else{
-      tree = compare > 0 ? right: left;
+      tree = compare > 0 ? tree->right: tree->left;
     }
     }
   return &tree;
