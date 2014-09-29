@@ -9,23 +9,14 @@ typedef struct node{
   struct node *left;
 } *Node;
 
-/* typedef struct tree{ */
-/*   Node *root; */
-/* }*Tree; */
-
 Node cursor = NULL;
 Node current_tree = NULL; 
 
-//Creates an empty node
-Node empty_node(){
+//Creates an empty tree/node
+Node empty(){
   Node empty = malloc(sizeof(struct node));
   return empty;
 }
-
-/* Tree empty_tree(){ */
-/*   Tree empty = malloc(sizeof(struct tree)); */
-/*   empty->root = NULL; */
-/* }  */
 
 char *clone_string(char *input_string){
   char *copy = malloc(strlen(input_string)+1);
@@ -33,12 +24,27 @@ char *clone_string(char *input_string){
   return copy;
 }
 
+
+//Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
+Node *search_entry(char *input_key, Node *tree){
+    while (tree != NULL){
+      int compare = strcmp(input_key, (*tree)->key);
+    if (compare == 0){
+      return tree;
+    }else{
+     *tree = compare > 0 ? (*tree)->right: (*tree)->left;
+    }
+    }
+  return &*tree;
+}
+
+
 Node create_node(char *input_key, char *input_value){
-  Node new_node = empty_node();
+  Node new_node = empty();
   new_node->key = clone_string(input_key);
   new_node->value = clone_string(input_value);
-  new_node->right = empty_node();
-  new_node->left = empty_node();
+  new_node->right = empty();
+  new_node->left = empty();
   return new_node;
 }
 //Funkar kanske
@@ -166,18 +172,6 @@ void add_node(char *input_key, char *input_value){
   insert_node(new_node, current_tree, NULL);
 }
 
-//Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-Node *search_entry(char *input_key, Node *tree){
-  int compare = compare(input_key, tree->key);
-    while (tree != NULL){
-    int compare = compare(input_key, *tree->key);
-    if (compare == 0){
-      return tree;
-    }else{
-      tree = compare > 0 ? tree->right: tree->left;
-    }
-    }
-  return &tree;
 
 //Changes the value of a specified key in an entry
 void update_value(char *old_value, char *new_value){

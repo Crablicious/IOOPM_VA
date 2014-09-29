@@ -10,7 +10,7 @@ struct node empty_node();
 void add_node(char input_key[], char input_value[]);
 
 //Searches for a matching key in the database and returns whether it is found or not and writes the result to output_buffer.
-char *search_entry(char *input_key, Node *tree);
+char *search_entry(char *input_key, struct node *tree);
 
 //Changes the value of a specified key in an entry
 void update_value(char *old_value, char *new_value); 
