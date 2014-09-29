@@ -41,7 +41,7 @@ Node *search_entry(char *input_key, Node *tree){
 
 Node create_node(char *input_key, char *input_value){
   Node new_node = empty();
-  new_node->key = clone_string(input_key);
+r  new_node->key = clone_string(input_key);
   new_node->value = clone_string(input_value);
   new_node->right = empty();
   new_node->left = empty();
