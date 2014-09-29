@@ -14,7 +14,7 @@ typedef struct node{
 /* }*Tree; */
 
 Node cursor = NULL;
-Node current_tree = NULL; 
+Node current_tree; 
 
 //Creates an empty node
 Node empty_node(){
@@ -37,14 +37,23 @@ Node create_node(char *input_key, char *input_value){
   Node new_node = empty_node();
   new_node->key = clone_string(input_key);
   new_node->value = clone_string(input_value);
-  new_node->right = empty_node();
-  new_node->left = empty_node();
+  Node right = empty_node();
+  right = NULL;
+  Node left = empty_node();
+  left = NULL;
+  
+  new_node->right = right;
+  new_node->left = left;
   return new_node;
 }
 //Funkar kanske
 int depth(Node tree){
   int count_right = 0;
   int count_left = 0;
+  if (tree == NULL){
+    return 0;
+  }
+  
   if (tree->right == NULL){
     return 1;
   }
@@ -144,6 +153,9 @@ void balance(Node tree, Node parent){
 void insert_node(Node new_node, Node tree, Node parent){
   if(tree == NULL){
     tree = new_node;
+    
+    printf("Hej insert: %s, %s,\n", tree->key, tree->value);
+    printf("Hej2: %s, %s,\n", current_tree->key, current_tree->value);
   }
   else{
     if(0 < strcmp(new_node->key, tree->key)){
@@ -153,7 +165,7 @@ void insert_node(Node new_node, Node tree, Node parent){
       insert_node(new_node, tree->right, tree);
     }
   }
-  printf("Hej: %s, %s,\n", tree->key, tree->value);
+  
   if (1 < abs(depth(tree->right) - depth(tree->left))){
     balance(tree, parent);
   }
@@ -162,15 +174,14 @@ void insert_node(Node new_node, Node tree, Node parent){
 //Adds an entry (key, value) into the database. 
 void add_node(char *input_key, char *input_value){
   Node new_node = create_node(input_key, input_value);
-  printf("Hej: %s, %s,\n", new_node->key, new_node->value);
   insert_node(new_node, current_tree, NULL);
-  
 }
 
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-char *search_entry(char *input_buffer){
+char *search_entry(char *input_buffer, Node *tree ){
   cursor = current_tree;
-  while (strcmp(input_buffer, cursor->key) != 0){
+  int compare = strcmp(input_buffer, cursor->key); 
+  while (compare != 0){
     if (0 < strcmp(input_buffer, cursor->key)){
       if (cursor->right != NULL){
         cursor = cursor->right;
