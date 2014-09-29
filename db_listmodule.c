@@ -44,16 +44,17 @@ void add_node(char *input_key, char *input_value){
 
 
 //case 1
-char *search_entry(char *input_key, Node *input_node){
-  while(strcmp(input_buffer, input_node->key) != 0){
-    if (input_node->next){
-    input_node = input_node->next;
+char *search_entry(char *input_key){
+  cursor = current_list
+  while(strcmp(input_key, cursor->key) != 0){
+    if (cursor->next){
+    cursor = cursor->next;
     }
     else{
       return NULL;
     }
   }
-  return input_node->value;  
+  return cursor->value;  
 }
 
 

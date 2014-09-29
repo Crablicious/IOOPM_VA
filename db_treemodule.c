@@ -18,35 +18,26 @@ Node empty(){
   return empty;
 }
 
+//Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
+
+
+
 char *clone_string(char *input_string){
   char *copy = malloc(strlen(input_string)+1);
   strcpy(copy, input_string);
   return copy;
 }
 
-
-//Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-Node *search_entry(char *input_key, Node *tree){
-    while (tree != NULL){
-      int compare = strcmp(input_key, (*tree)->key);
-    if (compare == 0){
-      return tree;
-    }else{
-     *tree = compare > 0 ? (*tree)->right: (*tree)->left;
-    }
-    }
-  return &*tree;
-}
-
-
 Node create_node(char *input_key, char *input_value){
   Node new_node = empty();
-r  new_node->key = clone_string(input_key);
+  new_node->key = clone_string(input_key);
   new_node->value = clone_string(input_value);
-  new_node->right = empty();
-  new_node->left = empty();
+  new_node->right = NULL;
+  new_node->left = NULL;
   return new_node;
 }
+
+
 //Funkar kanske
 int depth(Node tree){
   int count_right = 0;
@@ -147,6 +138,8 @@ void balance(Node tree, Node parent){
   }
 }
 
+
+
 void insert_node(Node new_node, Node tree, Node parent){
   if(tree == NULL){
     tree = new_node;
@@ -171,6 +164,22 @@ void add_node(char *input_key, char *input_value){
   printf("Hej: %s, %s,\n", new_node->key, new_node->value);
   insert_node(new_node, current_tree, NULL);
 }
+
+
+Node *search_entry(char *input_key){
+  cursor = current_tree;
+    while (cursor != NULL){
+      int compare = strcmp(input_key, cursor->key);
+    if (compare == 0){
+      return NULL;
+    }else{
+     cursor = compare > 0 ? cursor->right: cursor->left;
+    }
+    }
+    return cursor->value;
+}
+
+
 
 
 //Changes the value of a specified key in an entry

@@ -42,7 +42,7 @@ void query_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-  char *found = search_entry(buffer, buffer2);   
+  char *found = search_entry(buffer);   
   if (found){ 
   printf("Found entry:\nkey: %s\nvalue: %s\n", buffer, found);   
 }
@@ -55,7 +55,7 @@ void update_entry(){
   printf("Enter key: ");
   read_line(buffer, 128, stdin);
   puts("Searching database...\n");
-  char *found = search_entry(buffer, buffer2);
+  char *found = search_entry(buffer);
   if(found){
     printf("Matching entry found:\nkey: %s\nvalue: %s\n\n", buffer, found);
     puts("Enter new value:");
