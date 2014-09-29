@@ -172,35 +172,53 @@ void insert_node(Node new_node, Node tree, Node parent){
 }
 
 //Adds an entry (key, value) into the database. 
-void add_node(char *input_key, char *input_value){
+void add_node(char *input_key, char *input_value, Node *tree){
   Node new_node = create_node(input_key, input_value);
-  insert_node(new_node, current_tree, NULL);
+  insert_node(new_node, *tree, NULL);
+
+  return tree;
 }
 
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-char *search_entry(char *input_buffer, Node *tree ){
-  cursor = current_tree;
-  int compare = strcmp(input_buffer, cursor->key); 
-  while (compare != 0){
-    if (0 < strcmp(input_buffer, cursor->key)){
-      if (cursor->right != NULL){
-        cursor = cursor->right;
-      }
-      else{
-        return NULL;
-      }
-    }
-    else{
-      if (cursor->left != NULL){
-          cursor = cursor->left;
-        }
-      else{
-        return NULL;
-      }
-    }
+char *search_entry(char *input_buffer, Node *tree){
+  if (tree == NULL){
+    return NULL;
   } 
-  return cursor->value;
+  int compare = strcmp(input_buffer, cursor->key);
+  if (compare == 0){//ändra till (!compare)
+    return &tree;
+  }
+  else if (0 < compare){
+    search_entry(input_buffer, tree->right);
+  }
+  else{
+    search_entry(input_buffer, tree->left);
+  }
 }
+
+/* char *search_entry(char *input_buffer, Node *tree){ */
+/*   cursor = tree; */
+/*   int compare = strcmp(input_buffer, cursor->key);  */
+/*   while (compare != 0){ */
+/*     if (0 < strcmp(input_buffer, cursor->key)){ */
+/*       if (cursor->right != NULL){ */
+/*         cursor = cursor->right; */
+/*       } */
+/*       else{ */
+/*         return NULL; */
+/*       } */
+/*     } */
+/*     else{ */
+/*       if (cursor->left != NULL){ */
+/*           cursor = cursor->left; */
+/*         } */
+/*       else{ */
+/*         return NULL; */
+/*       } */
+/*     } */
+/*   }  */
+/*   return cursor->value; */
+/* } */
 
 //Changes the value of a specified key in an entry
 void update_value(char *old_value, char *new_value){
