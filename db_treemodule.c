@@ -13,6 +13,9 @@ typedef struct node{
 /*   Node *root; */
 /* }*Tree; */
 
+Node cursor = NULL;
+Node current_tree = NULL; 
+
 //Creates an empty node
 Node empty_node(){
   Node empty = malloc(sizeof(struct node));
@@ -34,22 +37,14 @@ Node create_node(char *input_key, char *input_value){
   Node new_node = empty_node();
   new_node->key = clone_string(input_key);
   new_node->value = clone_string(input_value);
-  new_node->right = NULL;
-  new_node->left = NULL;
+  new_node->right = empty_node();
+  new_node->left = empty_node();
   return new_node;
 }
-
-char *extract_value(struct node *db){
-  return db->value;
-}
-
 //Funkar kanske
 int depth(Node tree){
   int count_right = 0;
   int count_left = 0;
-  if (tree == NULL){
-    return 1;
-  }
   if (tree->right == NULL){
     return 1;
   }
@@ -146,38 +141,35 @@ void balance(Node tree, Node parent){
   }
 }
 
-void *insert_node(Node new_node, Node *tree, Node parent){
-  if(*tree == NULL){
+void insert_node(Node new_node, Node tree, Node parent){
+  if(tree == NULL){
     tree = new_node;
-    
-    if (1 < abs(depth((*tree)->right) - depth((*tree)->left))){
-      balance(*tree, parent);
-    }
-    //if (parent) printf("HejTEST: %s, %s,\n", parent->key, parent->value);
-    return;
   }
   else{
-    if(0 < strcmp(new_node->key, (*tree)->key)){
-      insert_node(new_node, &((*tree)->left), tree);
+    if(0 < strcmp(new_node->key, tree->key)){
+      insert_node(new_node, tree->left, tree);
     }
     else{
-      insert_node(new_node, (*tree)->right, tree);
+      insert_node(new_node, tree->right, tree);
     }
   }
-  
+  printf("Hej: %s, %s,\n", tree->key, tree->value);
+  if (1 < abs(depth(tree->right) - depth(tree->left))){
+    balance(tree, parent);
+  }
 }
 
 //Adds an entry (key, value) into the database. 
-struct node *add_node(char *input_key, char *input_value, struct node *db){
+void add_node(char *input_key, char *input_value){
   Node new_node = create_node(input_key, input_value);
-  db = insert_node(new_node, &db, NULL);
-  printf("Hej add_node: %s, %s,\n", db->key, db->value);
-  return db;
+  printf("Hej: %s, %s,\n", new_node->key, new_node->value);
+  insert_node(new_node, current_tree, NULL);
+  
 }
 
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-struct node *search_entry(char *input_buffer, struct node *db){
-  struct node *cursor = db;
+char *search_entry(char *input_buffer){
+  cursor = current_tree;
   while (strcmp(input_buffer, cursor->key) != 0){
     if (0 < strcmp(input_buffer, cursor->key)){
       if (cursor->right != NULL){
@@ -195,28 +187,10 @@ struct node *search_entry(char *input_buffer, struct node *db){
         return NULL;
       }
     }
-  }
-  printf("search_entry:\nkey: %s\nvalue: %s\n", cursor->key, cursor->value);   
-  return cursor;
+  } 
+  return cursor->value;
 }
 
-//recursive search entry
-struct node *rec_search_entry(char *input_buffer, struct node *db){
-  if (strcmp(input_buffer, db->key) != 0){
-    if (0 < strcmp(input_buffer, db->key)){
-      if (!(db->right)){
-        rec_search_entry(input_buffer, db->right);
-      }
-    }
-    else{
-      if (!(db->left)){
-        rec_search_entry(input_buffer, db->left);
-      }
-    }
-  }
-  return db;
-}
- 
 //Changes the value of a specified key in an entry
 void update_value(char *old_value, char *new_value){
   strcpy(old_value, new_value);
@@ -227,10 +201,4 @@ void update_value(char *old_value, char *new_value){
 void remove_node(char *input_key, char *output_buffer);
 
 //Prints out the database to the standard ouput
-void print_database_mod(struct node *db){
-  if (db){
-    printf("Key: %s Value: %s\n", db->key, db->value);
-    print_database_mod(db->left);
-    print_database_mod(db->right);
-  }
-}
+void print_database();

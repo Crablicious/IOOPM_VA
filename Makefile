@@ -10,9 +10,6 @@ list: db_listmodule.o db_list
 db_tree: db.c db_treemodule.o db_listmodule.h
 	$(COMPILE) db_treemodule.o db_listmodule.h db.c -o db_test 		
 
-db: db.c db_listmodule.h
-	$(COMPILE) -c db.c db_listmodule.h
-
 db_list: db.c db_listmodule.o db_listmodule.h
 	$(COMPILE) db_listmodule.o db_listmodule.h db.c -o db_test 
 
