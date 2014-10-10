@@ -72,7 +72,7 @@ int depth(Node tree){
   }
 }
 
-
+//1 is right, 0 is false.
 int check_parent(Node tree, Node parent){
   if (0<(strcmp(tree->key, parent->key))){
     return 1;
@@ -148,32 +148,51 @@ void balance(Node tree, Node parent){
   }
 }
 
-void *insert_node(Node new_node, Node *tree, Node parent){
-  if(*tree == NULL){
+struct node *insert_node(Node new_node, Node tree, Node parent){
+  struct node *tmp;
+  
+  if(tree == NULL){
     tree = new_node;
     
-    if (1 < abs(depth((*tree)->right) - depth((*tree)->left))){
-      balance(*tree, parent);
+    if (parent){
+      int r_or_left = check_parent(tree, parent);
+      if (r_or_left){
+        parent->right = new_node;
+      }
+      else{
+        parent->left = new_node;
+      }
+      printf("Rekursion key: %s, value: %s\n", tree->key, tree->value);
     }
-    //if (parent) printf("HejTEST: %s, %s,\n", parent->key, parent->value);
-    return;
-
+  }
+  else if (check_parent(new_node, tree)){ 
+    tmp = insert_node(new_node, tree->right, tree);
+      
   }
   else{
-    if(0 < strcmp(new_node->key, (*tree)->key)){
-      insert_node(new_node, &((*tree)->left), tree);
-    }
-    else{
-      insert_node(new_node, (*tree)->right, tree);
-    }
+    tmp = insert_node(new_node, tree->left, tree);
   }
+  
+  //Undersök om trädet behöver balanseras och gör det isåfall
+  if (1 < abs(depth(tree->right) - depth(tree->left))){
+    balance(tree, parent);
+  }
+ 
+  if(parent){
+    return parent;
+  }
+  else{
+    return tree;
+  } 
 }
+
+
 
 //Adds an entry (key, value) into the database. 
 struct node *add_node(char *input_key, char *input_value, struct node *db){
   Node new_node = create_node(input_key, input_value);
-  db = insert_node(new_node, &db, NULL);
-  printf("Hej add_node: %s, %s,\n", db->key, db->value);
+  db = insert_node(new_node, db, NULL);
+  printf("Det här är rooten ANNA, %s, %s \n", db->key, db->value);
   return db;
 }
 
