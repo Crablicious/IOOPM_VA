@@ -52,18 +52,9 @@ int depth(Node tree){
     return 0;
   }
   
-  if (tree->right == NULL){
-    return 1;
-  }
-  else{
-    count_right = 1 + depth(tree->right);
-  }
-  if (tree->left == NULL){
-    return 1;
-  }
-  else{
-    count_left = 1 + depth(tree->left);
-  }
+  count_right = 1 + depth(tree->right);
+  count_left = 1 + depth(tree->left);
+  
   if (count_left>count_right){
     return count_left;
   }
@@ -72,7 +63,7 @@ int depth(Node tree){
   }
 }
 
-//1 is right, 0 is false.
+//1 is right, 0 is false. Doesn't run when parent == NULL
 int check_parent(Node tree, Node parent){
   if (0<(strcmp(tree->key, parent->key))){
     return 1;
@@ -82,68 +73,88 @@ int check_parent(Node tree, Node parent){
   }
 }
 
-void balance(Node tree, Node parent){
-  int r_or_left = check_parent(tree, parent);
- 
+struct node *balance(Node tree, Node parent){
+  int r_or_left;
+  if (parent){ 
+    r_or_left = check_parent(tree, parent);
+  }
+  
+  struct node *new_root;
   if (tree->left == NULL){
     //case 1
     if (tree->right->left == NULL){
+      new_root = tree->right;
       tree->right->left=tree;
-
-      if (r_or_left){
-        parent->right=tree->right;
-      }
-      else{
-        parent->left=tree->right;
+      
+      if (parent){
+        if (r_or_left){
+          parent->right=tree->right;
+        }
+        else{
+          parent->left=tree->right;
+        }
       }
 
       tree->right=NULL;
       tree->left=NULL;
+      return new_root;
     }
-    //case 2tr
+    //case 2
     else{
+      new_root = tree->right;
       tree->right->right=tree->right->left;
       tree->right->left=tree;
-      
-      if (r_or_left){
-        parent->right=tree->right;
-      }
-      else{
-        parent->left=tree->right;
+
+      if (parent){      
+        if (r_or_left){
+          parent->right=tree->right;
+        }
+        else{
+          parent->left=tree->right;
+        }
       }
       
       tree->right=NULL;
       tree->left=NULL;
+      return new_root;
     }
   }
   else{
   //case 3
     if (tree->left->right == NULL){
+      new_root = tree->left;
       tree->left->right=tree;
 
-      if (r_or_left){
-        parent->right=tree->left;
+      if (parent){
+        if (r_or_left){
+          parent->right=tree->left;
+        }
+        else{
+          parent->left=tree->left;
+        }
       }
-      else{
-        parent->left=tree->left;
-      }
-      
+
       tree->right=NULL;
       tree->left=NULL;
+      return new_root;
       }
     //case 4
     else{
+      new_root = tree->left;
       tree->left->left=tree->left->right;
       tree->left->right=tree;
 
-      if (r_or_left){
-        parent->right=tree->left;
-      }
-      else{
-        parent->left=tree->left;
+      if (parent){
+        if (r_or_left){
+          parent->right=tree->left;
+        }
+        else{
+          parent->left=tree->left;
+        }
       }
       tree->right=NULL;
       tree->left=NULL;
+      return new_root;
     }
   }
 }
@@ -162,20 +173,24 @@ struct node *insert_node(Node new_node, Node tree, Node parent){
       else{
         parent->left = new_node;
       }
-      printf("Rekursion key: %s, value: %s\n", tree->key, tree->value);
     }
   }
   else if (check_parent(new_node, tree)){ 
-    tmp = insert_node(new_node, tree->right, tree);
+    insert_node(new_node, tree->right, tree);
       
   }
   else{
-    tmp = insert_node(new_node, tree->left, tree);
+    insert_node(new_node, tree->left, tree);
   }
   
   //Undersök om trädet behöver balanseras och gör det isåfall
   if (1 < abs(depth(tree->right) - depth(tree->left))){
-    balance(tree, parent);
+    if (!parent){
+      tree = balance(tree, parent);
+    }else{
+      balance(tree, parent);
+    }
+    
   }
  
   if(parent){
@@ -183,7 +198,7 @@ struct node *insert_node(Node new_node, Node tree, Node parent){
   }
   else{
     return tree;
-  } 
+  }
 }
 
 
@@ -192,7 +207,7 @@ struct node *insert_node(Node new_node, Node tree, Node parent){
 struct node *add_node(char *input_key, char *input_value, struct node *db){
   Node new_node = create_node(input_key, input_value);
   db = insert_node(new_node, db, NULL);
-  printf("Det här är rooten ANNA, %s, %s \n", db->key, db->value);
+  printf("Det här är rooten: %s \n", db->key);
   return db;
 }
 
@@ -246,13 +261,14 @@ void update_value(char *old_value, char *new_value){
 
 
 //Searches for input_key, removes the node
-void remove_node(char *input_key, char *output_buffer);
+//struct node *remove_node(char *input_key, char *output_buffer);
 
 //Prints out the database to the standard ouput
 void print_database_mod(struct node *db){
+  //inorder traversal
   if (db){
-    printf("Key: %s Value: %s\n", db->key, db->value);
     print_database_mod(db->left);
+    printf("Key: %s Value: %s\n", db->key, db->value);
     print_database_mod(db->right);
   }
 }
