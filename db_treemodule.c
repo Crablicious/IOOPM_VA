@@ -18,10 +18,6 @@ Node empty(){
   return empty;
 }
 
-//Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
-
-
-
 char *clone_string(char *input_string){
   char *copy = malloc(strlen(input_string)+1);
   strcpy(copy, input_string);
@@ -37,31 +33,18 @@ Node create_node(char *input_key, char *input_value){
   return new_node;
 }
 
-
-//Funkar kanske
-int depth(Node tree){
-  int count_right = 0;
-  int count_left = 0;
-  if (tree->right == NULL){
-    return 1;
-  }
-  else{
-    count_right = 1 + depth(tree->right);
-  }
-  if (tree->left == NULL){
-    return 1;
-  }
-  else{
-    count_left = 1 + depth(tree->left);
-  }
-  if (count_left>count_right){
-    return count_left;
-  }
-  else{
-    return count_right;
-  }
+int max (int x, int y){
+  return x > y ? x : y;
 }
 
+int depth(Node tree){
+  if (tree == NULL){
+    return 0;
+  }
+  else{
+    return 1 + max(depth(tree->left), depth(tree->right));
+  }  
+}
 
 int check_parent(Node tree, Node parent){
   if (0<(strcmp(tree->key, parent->key))){
@@ -74,9 +57,8 @@ int check_parent(Node tree, Node parent){
 
 void balance(Node tree, Node parent){
   int r_or_left = check_parent(tree, parent);
- 
-  if (tree->left == NULL){
-    //case 1
+   if (tree->left == NULL){
+    //case 1 right-right-right
     if (tree->right->left == NULL){
       tree->right->left=tree;
 
@@ -86,11 +68,9 @@ void balance(Node tree, Node parent){
       else{
         parent->left=tree->right;
       }
-
       tree->right=NULL;
-      tree->left=NULL;
     }
-    //case 2tr
+    //case 2 
     else{
       tree->right->right=tree->right->left;
       tree->right->left=tree;
@@ -139,25 +119,24 @@ void balance(Node tree, Node parent){
 }
 
 
-
-void insert_node(Node new_node, Node tree, Node parent){
-  if(tree == NULL){
-    tree = new_node;
+//search_entry kollar redan om noden redan finns
+void insert_node(Node new_node, Node *tree, Node parent){
+  if(*tree == NULL){
+    *tree = new_node;
   }
   else{
-    if(0 < strcmp(new_node->key, tree->key)){
-      insert_node(new_node, tree->left, tree);
+    int compare = strcmp(new_node->key, (*tree)->key);
+    if(0 < compare){
+      insert_node(new_node, &(*tree)->left, *tree);
+     }
+    else if(0 > compare){
+      insert_node(new_node, &(*tree)->right, *tree);
+        } 
+    if (1 < abs(depth(tree->right) - depth(tree->left))){
+      balance(tree, parent);
     }
-    else{
-      insert_node(new_node, tree->right, tree);
-    }
-  }
-  printf("Hej: %s, %s,\n", tree->key, tree->value);
-  if (1 < abs(depth(tree->right) - depth(tree->left))){
-    balance(tree, parent);
   }
 }
-
 //Adds an entry (key, value) into the database. 
 void add_node(char *input_key, char *input_value){
   Node new_node = create_node(input_key, input_value);
