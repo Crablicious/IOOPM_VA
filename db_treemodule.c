@@ -132,8 +132,8 @@ void insert_node(Node new_node, Node *tree, Node parent){
     else if(0 > compare){
       insert_node(new_node, &(*tree)->right, *tree);
         } 
-    if (1 < abs(depth(tree->right) - depth(tree->left))){
-      balance(tree, parent);
+    if (1 < abs(depth((*tree)->right) - depth((*tree)->left))){
+      balance(*tree, parent);
     }
   }
 }
@@ -145,17 +145,22 @@ void add_node(char *input_key, char *input_value){
 }
 
 
-Node *search_entry(char *input_key){
+Node *search_entry(char *input_key)
+{
   cursor = current_tree;
-    while (cursor != NULL){
+  while (cursor != NULL)
+    {
       int compare = strcmp(input_key, cursor->key);
-    if (compare == 0){
-      return NULL;
-    }else{
-     cursor = compare > 0 ? cursor->right: cursor->left;
+      if (compare == 0)
+        {
+          return NULL;
+        }
+      else
+        {
+          cursor = compare > 0 ? cursor->right: cursor->left;
+        }
     }
-    }
-    return cursor->value;
+  return cursor->value;
 }
 
 
