@@ -3,7 +3,7 @@ CC=gcc
 FLAGS=-Wall -ggdb -std=c99
 COMPILE= $(CC) $(FLAGS)
 
-tree: db_treemodule.o db
+tree: db_treemodule.o db_tree
 
 list: db_listmodule.o db_list
 
