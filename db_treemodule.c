@@ -80,50 +80,63 @@ struct node *balance(Node tree, Node parent){
   }
   
   struct node *new_root;
-  if (tree->left == NULL){
-    //case 1
-    if (tree->right->left == NULL){
+
+  struct node *tmp_a;
+  struct node *tmp_b;
+  struct node *tmp_c;
+
+  //case 1 right right heavy
+  if (depth(tree->right) > depth(tree->left)){
+    if (depth(tree->right->right) > depth(tree->right->left)){ 
       new_root = tree->right;
+      tmp_a = tree->right->left; 
       tree->right->left=tree;
       
       if (parent){
         if (r_or_left){
-          parent->right=tree->right;
+          parent->right=new_root;
         }
         else{
-          parent->left=tree->right;
-        }
-      }
-
-      tree->right=NULL;
-      tree->left=NULL;
-      return new_root;
-    }
-    //case 2
-    else{
-      new_root = tree->right;
-      tree->right->right=tree->right->left;
-      tree->right->left=tree;
-
-      if (parent){      
-        if (r_or_left){
-          parent->right=tree->right;
-        }
-        else{
-          parent->left=tree->right;
+          parent->left=new_root;
         }
       }
       
-      tree->right=NULL;
-      tree->left=NULL;
+      tree->right = tmp_a;
+
+      return new_root;
+    }
+    //case 2 right left heavy
+    else{
+      new_root = tree->right->left;
+      tmp_b = tree->right->left->left;
+      tmp_c = tree->right->left->right;
+      
+      if (parent){      
+        if (r_or_left){
+          parent->right=tree->right->left;
+        }
+        else{
+          parent->left=tree->right->left;
+        }
+      }
+
+      tree->right->left = tmp_c;
+      new_root->right = tree->right;
+      new_root->left = tree;
+      tree->right = tmp_b;
+      
       return new_root;
     }
   }
+
+
+
   else{
-  //case 3
-    if (tree->left->right == NULL){
+  //case 3 left left heavy
+    if (depth(tree->left->left) > depth(tree->left->right)){
+      
       new_root = tree->left;
-      tree->left->right=tree;
+      tmp_c = tree->left->right;
 
       if (parent){
         if (r_or_left){
@@ -133,27 +146,32 @@ struct node *balance(Node tree, Node parent){
           parent->left=tree->left;
         }
       }
-
-      tree->right=NULL;
-      tree->left=NULL;
+      new_root->right = tree;
+      tree->left = tmp_c;
+      
       return new_root;
       }
-    //case 4
+    //case 4 left right heavy
     else{
-      new_root = tree->left;
-      tree->left->left=tree->left->right;
-      tree->left->right=tree;
-
+      new_root = tree->left->right;
+      tmp_c = tree->left->right->right;
+      tmp_b = tree->left->right->left;
+      
       if (parent){
         if (r_or_left){
-          parent->right=tree->left;
+          parent->right=new_root;
         }
         else{
-          parent->left=tree->left;
+          parent->left=new_root;
         }
       }
-      tree->right=NULL;
-      tree->left=NULL;
+      
+      
+      new_root->left = tree->left;
+      new_root->right = tree;
+      new_root->right->left = tmp_c;
+      new_root->left->right = tmp_b;
+
       return new_root;
     }
   }
@@ -259,9 +277,69 @@ void update_value(char *old_value, char *new_value){
   strcpy(old_value, new_value);
 } 
 
+//Parent behövs endast eftersom den minsta hittas genom parent->left. Returnerar parent.
+struct node *smallest(struct node *db){
+  if (db != NULL && db->left == NULL){
+    return NULL; //basfallet. Nu står vi på minsta noden.
+  }
+  
+  struct node *small;
+  small = smallest(db->left);
+  if (small == NULL){
+    return db;
+  }
+  return small;
+}
 
+//Parent behövs endast eftersom den minsta hittas genom parent->left. Returnerar parent.
+struct node *biggest(struct node *db){
+  
+  if (db != NULL && db->right == NULL){
+    return NULL; //basfallet. Nu står vi på största noden.
+  }
+
+  struct node *big;
+  big = biggest(db->right);
+  if (big == NULL){ //Nu är vi på största nodens fader.
+    return db;
+  }
+  return big;
+}
+
+
+//Funkar förmodligen inte på löv.
 //Searches for input_key, removes the node
-//struct node *remove_node(char *input_key, char *output_buffer);
+struct node *remove_node(struct node *unwanted_node, struct node *db){
+  if (unwanted_node->right == NULL && unwanted_node->left == NULL){
+    unwanted_node = NULL;
+    //FREEEEEEEE
+    return db;
+  }
+
+    //Om unwanted_node har två subträd.
+  //Jag vill här ta bort en nod från vänster. biggest
+  if (depth(unwanted_node->left) > depth(unwanted_node->right)){
+    struct node *big_parent = biggest(unwanted_node);
+    puts("kommer vi hit");
+    struct node *biggest_node = big_parent->right; //Seg fault.
+    unwanted_node->key = biggest_node->key;
+    unwanted_node->value = biggest_node->value;
+    struct node *deleted_node = biggest_node;
+    big_parent->right = biggest_node->left;
+    //FREEE THE NOOOOOOOOOODE!!!!!!!!!!!!!!
+
+  }else{ //Här vill jag ta bort en nod från höger. Även då depth(right) == depth(left). smallest
+    struct node *small_parent = smallest(unwanted_node);
+    struct node *smallest_node = small_parent->left;
+    printf("Detta värde finns nu: %s", small_parent->key);
+    unwanted_node->key = smallest_node->key;
+    unwanted_node->value = smallest_node->value;
+    struct node *deleted_node = smallest_node;
+    small_parent->left = smallest_node->right;
+    //FREE THE NODE!!!!!!!!!!!!!!!!!
+  }
+  return db;
+}
 
 //Prints out the database to the standard ouput
 void print_database_mod(struct node *db){

@@ -103,7 +103,7 @@ void delete_entry(struct node *db){
       puts("Key does not exist, choose another one!\n");
     } 
   }
-  //remove_node(buffer, buffer2);
+  remove_node(found, db);
   printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);
 }
 

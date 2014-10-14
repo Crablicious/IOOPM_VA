@@ -1,5 +1,7 @@
 Victorias och Adams kommande redovisningar:
 
+valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes ./test
+
 Dagens redovisnin:
 
 A1

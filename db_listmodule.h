@@ -30,7 +30,7 @@ Effect: Changes old value into new value.
 */
 void *update_value(char *old_value, char *new_value); 
 
-//struct node *remove_node(struct node *unwanted_node, struct node *db)
+struct node *remove_node(struct node *unwanted_node, struct node *db);
 
 
 //--------------------------Not good----------------------
