@@ -139,10 +139,12 @@ void main_loop(struct node *db){
       db = delete_entry(db);
       break; 
     case 5: //prints the whole database
+      
       print_database(db);
       break;
     case 0: // Exit
       puts("Good bye!");
+      destroy_tree(db);
       break;
     default:
       // Please try again

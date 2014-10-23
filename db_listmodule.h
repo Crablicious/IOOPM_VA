@@ -30,8 +30,13 @@ Effect: Changes old value into new value.
 */
 void *update_value(char *old_value, char *new_value); 
 
+/*
+Input: A pointer to the unwanted node and the database.
+Effect. The unwanted node is deleted from the database.
+ */ 
 struct node *remove_node(struct node *unwanted_node, struct node **db);
 
+void destroy_tree(struct node *db);
 
 //--------------------------Not good----------------------
 //Prints out the database to the standard output

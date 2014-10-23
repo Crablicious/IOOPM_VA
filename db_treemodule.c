@@ -40,6 +40,13 @@ Node create_node(char *input_key, char *input_value){
   return new_node;
 }
 
+void destroy(struct node *bad_node){
+  free(bad_node->key);
+  free(bad_node->value);
+  free(bad_node);
+  bad_node = NULL;
+}
+
 char *extract_value(struct node *db){
   return db->value;
 }
@@ -272,34 +279,27 @@ void update_value(char *old_value, char *new_value){
 } 
 
 //Parent behövs endast eftersom den minsta hittas genom parent->left. Returnerar parent.
-struct node *smallest(struct node *db){
-  if (db != NULL && db->left == NULL){
-    return NULL; //basfallet. Nu står vi på minsta noden.
+struct node **smallest(struct node **db){
+  if (((*db) != NULL) && ((*db)->left == NULL)){
+    return db; //basfallet. Nu står vi på minsta noden.
   }
 
-  struct node *small;
-  small = smallest(db->left);
-  if (small == NULL){
-    return db;
-  }
+  struct node **small;
+  small = smallest(&((*db)->left));
   return small;
 }
 
-//Parent behövs endast eftersom den minsta hittas genom parent->left. Returnerar parent.
-struct node *biggest(struct node *db){
+//Parent behövs endast eftersom den största hittas genom parent->right. Returnerar parent.
+struct node **biggest(struct node **db){
   
-  if (db != NULL && db->right == NULL){
-    return NULL; //basfallet. Nu står vi på största noden.
+  if ((*db) != NULL && (*db)->right == NULL){
+    return db; //basfallet. Nu står vi på största noden.
   }
   
-  struct node *big;
-  big = biggest(db->right);
-  if (big == NULL){ //Nu är vi på största nodens fader.
-    return db;
-  }
+  struct node **big;
+  big = biggest(&((*db)->right));
   return big;
 }
-
 
 struct node *dbl_src_node(struct node **src_tree, char *src_key){
   int compare = strcmp(src_key, (*src_tree)->key);
@@ -315,47 +315,78 @@ struct node *dbl_src_node(struct node **src_tree, char *src_key){
   }
 }
 
+void destroy_k_v(struct node *bad_node){
+  free(bad_node->key);
+  free(bad_node->value);
+}
+
 //Funkar förmodligen inte på löv.
 //Searches for input_key, removes the node
 struct node *remove_node(struct node *unwanted_node, struct node **db){
   if (depth(*db) == 1){
-    *db = NULL;
-    return *db;
+    destroy(*db);
+    return NULL;
     } 
     
   if (unwanted_node->right == NULL && unwanted_node->left == NULL){
     *db = dbl_src_node(db, unwanted_node->key);
-    //FREEEEEEEE
+    destroy(unwanted_node);
     return *db;
   }
 
     //Om unwanted_node har två subträd.
   //Jag vill här ta bort en nod från vänster. biggest
-  if (depth(unwanted_node->left) < depth(unwanted_node->right)){
-    struct node *big_parent = biggest(unwanted_node);
-    struct node *biggest_node = big_parent->right; //Seg fault.
-    unwanted_node->key = biggest_node->key;
-    unwanted_node->value = biggest_node->value;
-    struct node *deleted_node = biggest_node;
-    big_parent->right = biggest_node->left;
-    //FREEE THE NOOOOOOOOOODE!!!!!!!!!!!!!!
-
-  }else{ //Här vill jag ta bort en nod från höger. Även då depth(right) == depth(left). smallest
-    struct node *small_parent = smallest(unwanted_node);
-    struct node *smallest_node = small_parent->left;
+  if (depth(unwanted_node->left) >= depth(unwanted_node->right)){
+    struct node **biggest_node;
+        
+    biggest_node = biggest(&(unwanted_node->left));
     
-    unwanted_node->key = smallest_node->key;
-    unwanted_node->value = smallest_node->value;
-    struct node *deleted_node = smallest_node;
-    small_parent->left = smallest_node->right;
-    //FREE THE NODE!!!!!!!!!!!!!!!!!
+    destroy_k_v(unwanted_node);
+    
+    unwanted_node->key = (*biggest_node)->key;
+    unwanted_node->value = (*biggest_node)->value;
+    
+    if ((*biggest_node)->right != NULL){
+      *biggest_node = (*biggest_node)->right;        
+    }
+    else{
+      free(*biggest_node);
+      *biggest_node = NULL;
+    }
+    
+  }else{ //Här vill jag ta bort en nod från höger.  smallest
+  
+    struct node **smallest_node;
+    
+    smallest_node = smallest(&(unwanted_node->right));
+      
+    destroy_k_v(unwanted_node);
+    
+    unwanted_node->key = (*smallest_node)->key;
+    unwanted_node->value = (*smallest_node)->value;
+    if ((*smallest_node)->right != NULL){
+      *smallest_node = (*smallest_node)->right;        
+    }
+    else{
+      free(*smallest_node);
+      *smallest_node = NULL;
+    }
   }
   return *db;
+}
+
+void destroy_tree(struct node *db){
+  if (db != NULL){
+    destroy_tree(db->left);
+    destroy_tree(db->right);
+    destroy(db);
+  }  
 }
 
 //Prints out the database to the standard ouput
 void print_database_mod(struct node *db){
   //inorder traversal
+  
   if (db){
     print_database_mod(db->left);
     printf("Key: %s Value: %s\n", db->key, db->value);
