@@ -74,7 +74,7 @@ void *update_entry(struct node *db){
 }
 
 
-void *insert_entry(struct node *db){
+struct node *insert_entry(struct node *db){
   struct node *found;
   //separera till en hjälpfunktion
   do{ 
@@ -88,11 +88,11 @@ void *insert_entry(struct node *db){
   } while(found);
   puts("Key is unique!\nEnter value: ");
   read_line(buffer2, 128, stdin);
-  add_node(buffer, buffer2, db);
+  db = add_node(buffer, buffer2, db);
   return db;
 }
 
-void delete_entry(struct node *db){
+struct node *delete_entry(struct node *db){
   struct node *found = NULL;
   while(!found){ //separera till en hjälpfunktion
     puts("Enter key");
@@ -103,8 +103,9 @@ void delete_entry(struct node *db){
       puts("Key does not exist, choose another one!\n");
     } 
   }
-  remove_node(found, db);
+  char *buffer2 = extract_value(found);
   printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);
+  return remove_node(found, &db);
 }
 
 void print_database(struct node *db){
@@ -132,10 +133,10 @@ void main_loop(struct node *db){
       update_entry(db);
       break;
     case 3: //insert a new entry
-      insert_entry(db);
+      db = insert_entry(db);
       break;
     case 4: //deletes an entry 
-      delete_entry(db);
+      db = delete_entry(db);
       break; 
     case 5: //prints the whole database
       print_database(db);
