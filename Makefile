@@ -3,6 +3,8 @@ CC=gcc
 FLAGS=-Wall -ggdb -std=c99
 COMPILE= $(CC) $(FLAGS)
 
+new: db_dbl
+
 tree: db_treemodule.o db
 
 list: db_listmodule.o db_list
@@ -22,6 +24,11 @@ db_listmodule.o: db_listmodule.c
 db_treemodule.o: db_treemodule.c
 	$(COMPILE) -c db_treemodule.c
 
+db_dbl: db_dbl.c db_dbldb.h db_dbltree.o
+	$(COMPILE) db_dbltree.o db_dbldb.h db_dbl.c -o dbl_tree 
+
+db_dbltree.o: db_dbltree.c
+	$(COMPILE) -c db_dbltree.c
 clean:
 	rm -rf *o
 

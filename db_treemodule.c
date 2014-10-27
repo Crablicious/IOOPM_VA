@@ -52,7 +52,7 @@ char *extract_value(struct node *db){
 }
 
 //Funkar kanske
-int depth(Node tree){
+int depth(struct node *tree){
   int count_right = 0;
   int count_left = 0;
   if (tree == NULL){
@@ -229,9 +229,11 @@ struct node *add_node(char *input_key, char *input_value, struct node *db){
   db = insert_node(new_node, db, NULL);
   return db;
 }
-
 //Searches for a matching key in the database and returns a pointer to it's value, NULL if not found.
 struct node *search_entry(char *input_buffer, struct node *db){
+  if (db == NULL){
+    return NULL;
+  }
   struct node *cursor = db;
   while (strcmp(input_buffer, cursor->key) != 0){
     if (0 < strcmp(input_buffer, cursor->key)){
@@ -307,10 +309,14 @@ struct node *dbl_src_node(struct node **src_tree, char *src_key){
     *src_tree = NULL;
     return NULL;
   }else if(0<compare){
-    dbl_src_node(&((*src_tree)->right), src_key);
+    if (dbl_src_node(&((*src_tree)->right), src_key) == NULL){
+      //check for balance
+    }
     return *src_tree;
   }else{
-    dbl_src_node(&((*src_tree)->left), src_key);
+    if (dbl_src_node(&((*src_tree)->left), src_key) == NULL){
+      //cehc
+    }
     return *src_tree;
   }
 }
@@ -320,13 +326,14 @@ void destroy_k_v(struct node *bad_node){
   free(bad_node->value);
 }
 
-//Funkar förmodligen inte på löv.
+
+
 //Searches for input_key, removes the node
 struct node *remove_node(struct node *unwanted_node, struct node **db){
   if (depth(*db) == 1){
     destroy(*db);
     return NULL;
-    } 
+  } 
     
   if (unwanted_node->right == NULL && unwanted_node->left == NULL){
     *db = dbl_src_node(db, unwanted_node->key);
