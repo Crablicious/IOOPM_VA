@@ -154,15 +154,21 @@ void testADD_ITEM(void){
   destroy_db(db4);
   
   
-  struct node *db5 = create_db("A", "1");
-  add_item("B", "2", &db5, cmp);
-  add_item("C", "3", &db5, cmp);
-  add_item("D", "4", &db5, cmp);
-  add_item("E", "5", &db5, cmp);
-  add_item("F", "6", &db5, cmp);
-  add_item("G", "7", &db5, cmp);
-  add_item("H", "8", &db5, cmp);
-  add_item("I", "9", &db5, cmp);
+  
+
+  add_item("Bad", "3", NULL, cmp);
+}
+
+void testBALANCE(void){
+  struct node *db = create_db("A", "1");
+  add_item("B", "2", &db, cmp);
+  add_item("C", "3", &db, cmp);
+  add_item("D", "4", &db, cmp);
+  add_item("E", "5", &db, cmp);
+  add_item("F", "6", &db, cmp);
+  add_item("G", "7", &db, cmp);
+  add_item("H", "8", &db, cmp);
+  add_item("I", "9", &db, cmp);
   
   void check_order(struct node *db, int **order){
   //inorder traversal
@@ -176,7 +182,7 @@ void testADD_ITEM(void){
  
   int *orderarray = malloc(sizeof(int)*12);
 
-  check_order(db5, &orderarray);
+  check_order(db, &orderarray);
   int i;
   for (i = 0; i < 9; ++i){
     CU_ASSERT(orderarray[i] == i+1);
@@ -192,10 +198,8 @@ void testADD_ITEM(void){
       check_balance(db->right);
     }
   }
-  check_balance(db5);
-  destroy_db(db5);
-
-  add_item("Bad", "3", NULL, cmp);
+  check_balance(db);
+  destroy_db(db);
 }
 
 void testALL_ITEMS(void){
@@ -317,6 +321,7 @@ int main()
   /* Advanced Functions Suite */
   if (
       (NULL == CU_add_test(pSuite2, "test of add_item()", testADD_ITEM))  ||
+      (NULL == CU_add_test(pSuite2, "test of balance invariant", testBALANCE))  ||
       (NULL == CU_add_test(pSuite2, "test of search_entry()", testSEARCH_ENTRY)) ||
       (NULL == CU_add_test(pSuite2, "test of all_items()", testALL_ITEMS)) ||
       (NULL == CU_add_test(pSuite2, "test of remove_item()", testREMOVE_ITEM)) 
