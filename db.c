@@ -98,7 +98,7 @@ void delete_entry(){
       puts("Key does not exist, choose another one!\n");
     } 
   }
-  remove_node(buffer, buffer2);
+  //remove_node(buffer, buffer2);
   printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", buffer, buffer2);
 }
 
@@ -129,7 +129,7 @@ void main_loop(){
        delete_entry();
        break; 
     case 5: //prints the whole database
-      print_database();
+      //print_database();
       break;
     case 0: // Exit
       puts("Good bye!");
@@ -150,7 +150,7 @@ int main(int argc, char *argv[]){
   print_welcome();
   // Read the input file
   //pull_database(argv[1]); //arraynotation
-  pull_database (*(argv+1)); //pekarnotation
+  // pull_database (*(argv+1)); //pekarnotation
   // Main loop
   main_loop();
   return 0;

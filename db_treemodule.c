@@ -6,7 +6,7 @@ typedef struct node{
   char *key;
   char *value;
   struct node *right;
-  struct node *left;
+noooooooooooode  struct node *left;
 } *Node;
 
 Node cursor = NULL;
@@ -31,6 +31,11 @@ Node create_node(char *input_key, char *input_value){
   new_node->right = NULL;
   new_node->left = NULL;
   return new_node;
+}
+
+Node delete_node(Node *node){
+  if(node != NULL){
+    free(node);
 }
 
 int max (int x, int y){
@@ -120,25 +125,28 @@ void balance(Node tree, Node parent){
 
 
 //search_entry kollar redan om noden redan finns
-void insert_node(Node new_node, Node *tree, Node parent){
+void insert_node(Node new_node, Node *tree, Node parent)
+{
   if(*tree == NULL){
     *tree = new_node;
   }
   else{
     int compare = strcmp(new_node->key, (*tree)->key);
     if(0 < compare){
-      insert_node(new_node, &(*tree)->left, *tree);
-     }
-    else if(0 > compare){
-      insert_node(new_node, &(*tree)->right, *tree);
-        } 
+       insert_node(new_node, &(*tree)->left, *tree);
+    }
+     else if(0 > compare){
+       insert_node(new_node, &(*tree)->right, *tree);
+     } 
     if (1 < abs(depth((*tree)->right) - depth((*tree)->left))){
       balance(*tree, parent);
     }
   }
 }
+
 //Adds an entry (key, value) into the database. 
-void add_node(char *input_key, char *input_value){
+void add_node(char *input_key, char *input_value)
+{
   Node new_node = create_node(input_key, input_value);
   printf("Hej: %s, %s,\n", new_node->key, new_node->value);
   insert_node(new_node, current_tree, NULL);
@@ -165,13 +173,14 @@ Node *search_entry(char *input_key)
 
 
 
-
+ 
 //Changes the value of a specified key in an entry
-void update_value(char *old_value, char *new_value){
+void update_value(char *old_value, char *new_value)
+{
   strcpy(old_value, new_value);
 } 
-
-
+ 
+ 
 //Searches for input_key, removes the node
 void remove_node(char *input_key, char *output_buffer);
 
