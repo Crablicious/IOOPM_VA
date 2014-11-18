@@ -18,7 +18,6 @@ typedef struct node{
 } *Node;
 
 
-Node list = NULL;
 Node cursor = NULL;
 Node current_list = NULL; 
 
