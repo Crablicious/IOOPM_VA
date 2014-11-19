@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "db_module.h"
+#include <errno.h>
 
 char buffer[128]; 
 char buffer2[128];
@@ -33,19 +34,26 @@ void read_line(char *dest, int n, FILE *source){
 
 struct node *pull_database(char *filename){
   printf("Loading database \"%s\"...\n\n", filename);
+  errno = 0;
   FILE *database = fopen(filename, "r");
-  struct node *db = NULL;
-  while(!(feof(database))){
-    read_line(buffer, 128, database);
-    read_line(buffer2, 128, database);
-    if (db == NULL){
-      db = create_db(buffer, buffer2);
-    }else{
-      add_item(buffer, buffer2, &db, cmp);
+  if (database == NULL){
+    //perror("Error printed by perror");
+    fprintf(stderr, "Error opening file: %s\n ", strerror(errno));
+  }else{
+    struct node *db = NULL;
+    while(!(feof(database))){
+      read_line(buffer, 128, database);
+      read_line(buffer2, 128, database);
+      if (db == NULL){
+        db = create_db(buffer, buffer2);
+      }else{
+        add_item(buffer, buffer2, &db, cmp);
+      }
     }
+    fclose(database);
+    return db;
   }
-  fclose(database);
-  return db;
+  return NULL;
 }
 
 void query_entry(struct node *db){
@@ -179,7 +187,6 @@ int main(int argc, char *argv[]){
  
   struct node *db = pull_database (argv[1]);
   
-  // Main loop
-  main_loop(db);
+  if (db) main_loop(db);
   return 0;
 }
