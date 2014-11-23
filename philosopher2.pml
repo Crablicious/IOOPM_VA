@@ -34,7 +34,7 @@ Done:	cutlery[left] = fork; cutlery[right] = fork;
 
 proctype monitor(){
          do
-         ::assert(think[n] || eat[n]);
+         ::assert(think[n]==true || eat[n]==true);
         od
 }      
 
