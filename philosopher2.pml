@@ -34,15 +34,7 @@ Done:	cutlery[right] = fork; cutlery[left] = fork;
 }
 
 init{
-  	int j = 0;
-        
-        do 
-	:: j == n -> break
-	:: else -> 	cutlery[j] = fork;
-			j++
-	od
-
-	int i = 0;
+  	int i = 0;
 	do 
 	:: i >= n -> break
 	:: else -> 	run phil(i);
