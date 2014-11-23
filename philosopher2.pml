@@ -8,35 +8,34 @@ Student 2:
 
 #define n 5
 bool think[n], eat[n] = false;
-int fork[n] = -1;
+fork{none,fork}
+mtype fork[n];
 
-proctype phil(int id) {
-       int right = id; int left = (id + 1) % n;
-     
+proctype phil(int id) {     
 Think:    atomic {eat[id] = false; think[id] = true};
           printf("Philosopher %d is thinking\n", id);     
 
-              if :: (id + 1) <id;
-                   atomic{fork[id +1 ] == -1 -> fork[id + 1] == id};
-	           atomic{fork[id] == -1 -> fork[id] == id}; 
-                 :: id<id + 1;
-                   atomic{fork[id] == -1 -> fork[id] == id};  
-                   atomic{fork[id + 1] == -1 -> fork[id + 1] == id};
+              if :: ((id + 1) % n) <id;
+                   atomic{fork[(id +1) % n] == fork -> fork[(id + 1) % n] = id};
+	           atomic{fork[id] == fork -> fork[id] = id}; 
+                 :: id<((id + 1) % n%);
+                   atomic{fork[id] == fork -> fork[id] = id};  
+                   atomic{fork[(id + 1) % n] == fork -> fork[(id + 1) % n] = id};
               fi;
     
-Eat:     assert (fork[id + 1] == id && fork[id]==id);
+Eat:     assert (fork[(id + 1) % n] == id && fork[id]==id);
          atomic { think[id] = false; eat[id] = true};
          printf("Philosopher %d is eating\n", id);
 
-Done:	fork[id] = -1; fork[id + 1] = -1;
+Done:	fork[id] = fork; fork[(id + 1) % n] = fork;
         goto Think;
 }
 
 init{
   	int i = 0;
-	do 
-	:: (i!= n) -> 
-	   {run phil(i); i++}
-	:: (i==n) -> break
-	od
+	atomic{do 
+	       :: (i!= n) -> 
+	           {run phil(i); i++}
+	       :: (i==n) -> break
+	       od
 }
