@@ -33,9 +33,9 @@ Done:	fork[left] = -1; fork[right] = -1;
 
 init{
   	int i = 0;
-	atomic{do 
-	       :: (i!= n) -> 
-	           {run phil(i); i++}
-	       :: (i==n) -> break
-	       od
+        do 
+	:: i>= n -> break 
+	:: else ->  run phil(i);
+                            i++
+	od
 }
