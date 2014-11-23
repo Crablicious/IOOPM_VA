@@ -43,7 +43,8 @@ init{
         do 
 	:: i>= n -> break 
 	:: else ->  run phil(i);
+                  run monitor();      
                             i++
 	od
-        run monitor();
+      
 }
