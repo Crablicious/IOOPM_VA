@@ -25,7 +25,7 @@ Eating:  if :: left<right;
                atomic{cutlery[left] == fork -> cutlery[left] == none};
          fi;
 
-         atomic { pthink[id] = true; peat[id] =false};
+         atomic { pthink[id] = false; peat[id] = true};
          printf("Philosopher %d is eating\n", id);
 
 Done:	cutlery[right] = fork; cutlery[left] = fork;
