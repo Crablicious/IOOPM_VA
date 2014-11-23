@@ -12,10 +12,10 @@ mtype{fork, none};
 mtype cutlery [n];
 
 proctype phil(int id) {
-        do :: int right = id; int left = (id + 1) % n;
-
-Think:   atomic { peat[id] = false; pthink[id] = true};
-         printf("Philosopher %d is thinking\n", id);     
+       int right = id; int left = (id - 1);
+     
+Think:    atomic { peat[id] = false; pthink[id] = true};
+          printf("Philosopher %d is thinking\n", id);     
 
               if :: left<right;
                    atomic{cutlery[left] == fork -> cutlery[left] == none};
@@ -24,14 +24,13 @@ Think:   atomic { peat[id] = false; pthink[id] = true};
                    atomic{cutlery[right] == fork -> cutlery[right] == none};  
                    atomic{cutlery[left] == fork -> cutlery[left] == none};
               fi;
-
-              
+    
 Eat:     assert (cutlery[left] == none && cutlery[right]==none);
          atomic { pthink[id] = false; peat[id] = true};
          printf("Philosopher %d is eating\n", id);
 
 Done:	cutlery[right] = fork; cutlery[left] = fork;
-        od;
+  
 }
 
 init{
