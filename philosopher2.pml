@@ -8,7 +8,8 @@ Student 2:
 
 #define n 5
 bool think[n], eat[n] = false;
-int fork[n] = -1;
+mtype {fork, none};
+mtype fork[n] = fork;
 
 proctype phil(int id) {     
          int left=id; int right = (id +1) % n; 
@@ -16,18 +17,18 @@ Think:    atomic {eat[id] = false; think[id] = true};
           printf("Philosopher %d is thinking\n", id);     
 
               if :: right < left;
-                   atomic{fork[right] == -1 -> fork[right] = id};
-	           atomic{fork[left] == -1 -> fork[left] = id}; 
+                   atomic{fork[right] == fork -> fork[right] = none};
+	           atomic{fork[left] == fork -> fork[left] = none}; 
                  :: left<right;
-                   atomic{fork[left] == -1 -> fork[left] = id};  
-                   atomic{fork[right] == -1 -> fork[right] = id};
+                   atomic{fork[left] == fork -> fork[left] = none};  
+                   atomic{fork[right] == fork -> fork[right] = none};
               fi;
     
-Eat:     assert (fork[right] == id && fork[left] == id);
+Eat:     assert (fork[right] == none && fork[left] == none);
          atomic { think[id] = false; eat[id] = true};
          printf("Philosopher %d is eating\n", id);
 
-Done:	fork[left] = -1; fork[right] = -1;
+Done:	fork[left] = fork; fork[right] = fork;
         goto Think;
 }
 
