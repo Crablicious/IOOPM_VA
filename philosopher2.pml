@@ -7,12 +7,12 @@ Student 2:
  
 
 #define n 5
-bool pthink[n], peat[] = false;
+bool pthink[n], peat[n] = false;
 mtype{fork, none};
 mtype cutlery [n];
 
 proctype phil(int id) {
-         int right = id; int left = (i+id) % n;
+         int right = id; int left = (id + 1) % n;
 
 Think:   atomic { peat[id] = false; pthink[id] = true};
          printf("Philosopher %d is thinking\n", id);     
