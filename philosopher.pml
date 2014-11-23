@@ -1,4 +1,4 @@
-/* Dinning Philosophers Problem */
+/* Dining Philosophers Problem */
 /*
 Student 1:
 Student 2:
@@ -15,30 +15,40 @@ proctype phil(int id) {
 	do 
 	:: 	printf("Philosopher %d is thinking\n", id);
 		/* ... */
-        
+                
         if
-            :: 	(id-1) == -1 -> (cutlery[n-1] == fork); cutlery[n-1] == none;
-            :: 	else -> (cutlery[id-1] == fork); cutlery[id-1] == none;
+            :: 	((id-1) == -1) -> atomic{
+                                  (cutlery[n-1] == fork); 
+                                  cutlery[n-1] = none;
+                                  }
+            :: 	else->atomic{
+                (cutlery[id-1] == fork); 
+                cutlery[id-1] = none;
+                }
+                        
         fi
           
-          //Plockar sin högra gaffel
-        
+        atomic{
         (cutlery[id] == fork);
-        cutlery[id] == none;
-        
+        cutlery[id] = none;
+        }
 	   	printf("Philosopher %d is eating\n", id);
-		cutlery[id] = fork; cutlery[id-1] = fork;
-                /* ... Släpper gaffeln */ 
-	od 
+		cutlery[id] = fork; 
+                if 
+                :: id == 0->cutlery[n-1] = fork; 
+                :: else->cutlery[id-1] = fork;
+                fi
+      	od 
 }
 
 init{
   	int j = 0;
-	do 
-	:: j = n -> break
+        
+        do 
+	:: j == n -> break
 	:: else -> 	cutlery[j] = fork;
 			j++
-	od
+	od*/
 
 	int i = 0;
 	do 
