@@ -35,17 +35,15 @@ Done:	cutlery[left] = fork; cutlery[right] = fork;
 proctype monitor(){
          do
          ::assert(think[n] || eat[n]);
-}        od
-      
+        od
+}      
 
 init{
   	int i = 0;
-        atomic{
         do 
 	:: i>= n -> break 
 	:: else ->  run phil(i);
                             i++
 	od
         run monitor();
-        }
 }
