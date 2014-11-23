@@ -7,37 +7,36 @@ Student 2:
  
 
 #define n 5
-bool pthink[n], peat[n] = false;
-mtype{fork, none};
-mtype cutlery [n];
+bool think[n], eat[n] = false;
+int fork[n] = -1;
 
 proctype phil(int id) {
-       int right = id; int left = (id - 1);
+       int right = id; int left = (id + 1) % n;
      
-Think:    atomic { peat[id] = false; pthink[id] = true};
+Think:    atomic {eat[id] = false; think[id] = true};
           printf("Philosopher %d is thinking\n", id);     
 
-              if :: left<right;
-                   atomic{cutlery[left] == fork -> cutlery[left] == none};
-	           atomic{cutlery[right] == fork -> cutlery[right] == none}; 
-                 :: right<left;
-                   atomic{cutlery[right] == fork -> cutlery[right] == none};  
-                   atomic{cutlery[left] == fork -> cutlery[left] == none};
+              if :: (id + 1) <id;
+                   atomic{fork[id +1 ] == -1 -> fork[id + 1] == id};
+	           atomic{fork[id] == -1 -> fork[id] == id}; 
+                 :: id<id + 1;
+                   atomic{fork[id] == -1 -> fork[id] == id};  
+                   atomic{fork[id + 1] == -1 -> fork[id + 1] == id};
               fi;
     
-Eat:     assert (cutlery[left] == none && cutlery[right]==none);
-         atomic { pthink[id] = false; peat[id] = true};
+Eat:     assert (fork[id + 1] == id && fork[id]==id);
+         atomic { think[id] = false; eat[id] = true};
          printf("Philosopher %d is eating\n", id);
 
-Done:	cutlery[right] = fork; cutlery[left] = fork;
-  
+Done:	fork[id] = -1; fork[id + 1] = -1;
+        goto Think;
 }
 
 init{
   	int i = 0;
 	do 
-	:: i >= n -> break
-	:: else -> 	run phil(i);
-			i++
+	:: (i!= n) -> 
+	   {run phil(i); j++}
+	:: (i==n) -> break
 	od
 }
