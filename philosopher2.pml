@@ -36,7 +36,7 @@ init{
   	int i = 0;
 	do 
 	:: (i!= n) -> 
-	   {run phil(i); j++}
+	   {run phil(i); i++}
 	:: (i==n) -> break
 	od
 }
