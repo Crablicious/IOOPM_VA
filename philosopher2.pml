@@ -1,7 +1,7 @@
 /* Dining Philosophers Problem */
 /*
-Student 1:
-Student 2:
+Student 1:Adam Wendelin
+Student 2:Victoria Catalán
 */
 
  
@@ -9,7 +9,7 @@ Student 2:
 #define n 5
 bool think[n], eat[n] = false;
 mtype {fork, none};
-mtype fork[n] = fork;
+mtype cutlery[n] = fork;
 
 proctype phil(int id) {     
          int left=id; int right = (id +1) % n; 
@@ -17,26 +17,35 @@ Think:    atomic {eat[id] = false; think[id] = true};
           printf("Philosopher %d is thinking\n", id);     
 
               if :: right < left;
-                   atomic{fork[right] == fork -> fork[right] = none};
-	           atomic{fork[left] == fork -> fork[left] = none}; 
+                   atomic{cutlery[right] == fork -> cutlery[right] = none};
+	           atomic{cutlery[left] == fork -> cutlery[left] = none}; 
                  :: left<right;
-                   atomic{fork[left] == fork -> fork[left] = none};  
-                   atomic{fork[right] == fork -> fork[right] = none};
+                   atomic{cutlery[left] == fork -> cutlery[left] = none};  
+                   atomic{cutlery[right] == fork -> cutlery[right] = none};
               fi;
     
-Eat:     assert (fork[right] == none && fork[left] == none);
+Eat:     assert (cutlery[right] == none && cutlery[left] == none);
          atomic { think[id] = false; eat[id] = true};
          printf("Philosopher %d is eating\n", id);
 
-Done:	fork[left] = fork; fork[right] = fork;
+Done:	cutlery[left] = fork; cutlery[right] = fork;
         goto Think;
 }
 
+proctype monitor(){
+         do
+         ::assert(think[n] || eat[n]);
+}        od
+      
+
 init{
   	int i = 0;
+        atomic{
         do 
 	:: i>= n -> break 
 	:: else ->  run phil(i);
                             i++
 	od
+        run monitor();
+        }
 }
