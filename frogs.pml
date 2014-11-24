@@ -1,3 +1,9 @@
+/*
+Students:
+Adam Wendelin
+Victoria Catalan
+*/
+
 #define success (\
 (stones[0]==red) && \
 (stones[1]==red) && \
