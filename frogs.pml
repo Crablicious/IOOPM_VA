@@ -1,12 +1,3 @@
-#define STONES 7
-byte i;
-#define FOR(i,l,h) i = l; do::i < h->
-#define ROF(i,l,h) ;i++ :: i>= h -> break od
-
-bool canjump;
-bool taken;
-
-
 #define success (\
 (stones[0]==red) && \
 (stones[1]==red) && \
@@ -18,11 +9,11 @@ bool taken;
 )
 
 mtype{none, yellow, red};
-mtype stones [STONES];
+mtype stones [7];
 
 
 
-proctype jumpy(byte pos){
+proctype jumpY(byte pos){
          do
          :: atomic{
             (pos < 6) && (stones[pos+1] == none) -> 
@@ -35,11 +26,12 @@ proctype jumpy(byte pos){
             stones[pos+2] = yellow; 
             stones[pos] = none; 
             pos = pos+2;
-            } 
+            }
+          :: else -> skip;
          od         
 }
 
-proctype jumpr(byte pos){
+proctype jumpR(byte pos){
          do
          :: atomic{
             (pos > 0) && (stones[pos-1] == none) -> 
@@ -52,7 +44,8 @@ proctype jumpr(byte pos){
             stones[pos-2] = red; 
             stones[pos] = none; 
             pos = pos-2;
-            } 
+            }
+         :: else -> skip; 
          od   
 }
 
@@ -63,7 +56,7 @@ proctype monitor(){
 }       
 
 init{
-        atomic{
+        
         stones[0] = yellow;
         stones[1] = yellow;
         stones[2] = yellow;
@@ -72,13 +65,13 @@ init{
         stones[5] = red;
         stones[6] = red;
                
-        run jumpy(0);
-        run jumpy(1);
-        run jumpy(2);
-        run jumpr(4);
-        run jumpr(5);
-        run jumpr(6);
+        run jumpY(0);
+        run jumpY(1);
+        run jumpY(2);
+        run jumpR(4);
+        run jumpR(5);
+        run jumpR(6);
         
         run monitor();
-        }
+        
 }
